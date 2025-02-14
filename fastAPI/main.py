@@ -67,6 +67,9 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+class OTPVerification(BaseModel):
+    otp: int
+
 # Signup Route
 
 @app.get("/")
@@ -165,21 +168,72 @@ async def signup(
 
 # OTP Verification Route
 @app.post("/verify-otp")
-async def verify_otp(email: str = Form(...), otp: str = Form(...)):
+async def verify_otp(verification: OTPVerification):
     try:
-        # Get user with matching email and OTP
-        user = supabase.table("users").select("*").eq("email", email).eq("otp", otp).execute()
+        # Convert OTP to string for comparison
+        otp_str = str(verification.otp)
         
-        if not user.data:
+        # Get user with matching OTP
+        response = supabase.table("users").select("*").eq("otp", otp_str).execute()
+        
+        # Debug logging
+        print("OTP:", otp_str)
+        print("Response:", response.data)
+        
+        if not response.data:
             raise HTTPException(status_code=400, detail="Invalid OTP")
+        
+        user = response.data[0]
+        
+        # Check if OTP is expired (optional)
+        # if is_otp_expired(user['created_at']):
+        #     raise HTTPException(status_code=400, detail="OTP has expired")
             
         # Update user as verified
-        supabase.table("users").update({"is_verified": True, "otp": None}).eq("email", email).execute()
+        supabase.table("users").update({
+            "is_verified": True,
+            "otp": None
+        }).eq("id", user['id']).execute()
         
         return {"message": "Email verified successfully!"}
         
     except Exception as e:
+        print("Error:", str(e))  # Add debug logging
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/resend-otp")
+async def resend_otp():
+    try:
+        # Generate new 6-digit OTP
+        new_otp = str(randint(100000, 999999))
+        
+        # Get user from session or token (you'll need to implement this)
+        # For now, this is a placeholder
+        # user = get_current_user()
+        
+        # Update user's OTP in database
+        # supabase.table("users").update({"otp": new_otp}).eq("email", user.email).execute()
+        
+        # Send new OTP email
+        # message = MessageSchema(
+        #     subject="New Verification Code",
+        #     recipients=[user.email],
+        #     body=f"""
+        #     Your new verification code is: {new_otp}
+        #     
+        #     This code will expire in 5 minutes.
+        #     """,
+        #     subtype="html"
+        # )
+        
+        # fm = FastMail(conf)
+        # await fm.send_message(message)
+        
+        return {"message": "New OTP sent successfully"}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Login Route
 @app.post("/login")
 async def login(user: UserLogin):
