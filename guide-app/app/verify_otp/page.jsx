@@ -8,15 +8,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function VerifyOTP() {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const validateInput = () => {
     if (!otp || otp.length !== 6) {
@@ -81,14 +76,6 @@ export default function VerifyOTP() {
       setOtp(value);
     }
   };
-
-  if (!mounted) {
-    return <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="p-8 bg-white rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Loading...</h2>
-      </div>
-    </div>;
-  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
