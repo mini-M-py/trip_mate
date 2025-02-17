@@ -5,7 +5,7 @@ import jwt
 from dotenv import load_dotenv
 import secrets
 from . import model
-from .database import engine, createBucket, supabase
+from .database import engine, supabase
 from .routers import user
 
 app = FastAPI()
@@ -23,7 +23,7 @@ app.add_middleware(
 app.include_router(user.router)
 
 model.Base.metadata.create_all(bind=engine)
-createBucket("Bucket")
+#createBucket("Bucket")
 
 secret_key = secrets.token_hex(32) 
 

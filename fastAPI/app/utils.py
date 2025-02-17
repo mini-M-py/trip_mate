@@ -1,15 +1,30 @@
-from fastapi import status, HTTPException
+from fastapi import UploadFile, status, HTTPException
 from passlib.context import CryptContext
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig 
 from cachetools import TTLCache
-import string
-import random
 from .config import settings
+from .database import supabase
 from random import randint
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated = 'auto')
 
 otpCache = TTLCache(maxsize=1000, ttl=120)
+
+async def uploadImage(image: UploadFile, file_location: str):
+    file_content = await image.read()
+    try:
+        response = supabase.storage.from_("Bucket").upload(
+                path=file_location,
+                file=file_content,
+                file_options={"content-type": str(image.content_type)} 
+            )
+        if hasattr(response, 'error') and response.error:
+              raise HTTPException(status_code=500, detail="Error uploading profile picture")
+
+    except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error uploading profile picture: {str(e)}")
+
+
 
 async def send_mail(email: str, otp: str):
     conf = ConnectionConfig(

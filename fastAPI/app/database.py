@@ -15,13 +15,6 @@ SessionLocal = sessionmaker(autocommit =False, autoflush= False, bind=engine)
 Base = declarative_base()
 
 
-def createBucket(bucket_name: str):
-    try:
-        response = supabase.storage.create_bucket(bucket_name, 
-                                              options = {'public': True})
-    except:
-        print("cannot create bucket")
-
 def get_db():
     db = SessionLocal()
     try:
