@@ -13,9 +13,11 @@ export default function Signup() {
     phone: "",
     password: "",
     confirm_password: "",
+    otp: "",
     profile_pic: null,
   });
   const [previewUrl, setPreviewUrl] = useState(null);
+    const [step, setStep] = useState(0)
 
   const countries = [
     "United States", "United Kingdom", "Canada", "Australia", "India", 
@@ -46,27 +48,50 @@ export default function Signup() {
       }
     };
   }, [previewUrl]);
-
+    
+   const sendOtp = async () => {
+       if(formData.email != ""){
+           const data = new FormData();
+           data.append('email', formData.email)
+           const res = await fetch('http://localhost:8000/users/verify',{
+               method: 'POST',
+               body: data
+           }); 
+           console.log(res.status);
+           if(res.status === 422){
+               alert('Invalid email');
+           }else if(res.status === 202){
+               setStep(1);
+               alert('check email for OTP');
+           }else{
+              alert("something went woron cannot send OTP");
+           }
+       }
+   }; 
+     
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      console.log(formData)
+        e.preventDefault();
+        const data = new FormData();
+        Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
     });
 
     try {
-      const response = await axios.post("http://localhost:8000/signup", data);
+      const response = await axios.post("http://localhost:8000/users/visitor", data);
       router.push("/verify_otp");
     } catch (error) {
       alert('An error occurred during signup');
     }
-  };
+
+ }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 py-8">
       <div className="p-8 bg-white rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-black">Create Account</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4">
+      {!step ? (<>
           <input
             type="text"
             name="name"
@@ -127,7 +152,7 @@ export default function Signup() {
             minLength={4}
             autoComplete="off"
             onChange={handleChange}
-            className="w-full p-3 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            className=" w-full p-3 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             required
           />
           <input
@@ -140,7 +165,8 @@ export default function Signup() {
             className="w-full p-3 border text-black  border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             required
           />
-          <div className="w-full">
+
+           <div className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
             <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-500 transition-colors">
               <div className="space-y-2 text-center">
@@ -190,13 +216,29 @@ export default function Signup() {
               </div>
             </div>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-colors font-medium"
-          >
+              </>
+      ):(<>
+          <input
+            type="text"
+            name="otp"
+            value=""
+            placeholder="OTP"
+            minLength={4}
+            autoComplete="off"
+            onChange={handleChange}
+            className=" w-full p-3 border text-black  border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            required
+          />
+              </>)}
+
+      </form>
+        <button
+            onClick={!step ? sendOtp : handleSubmit}
+            className="mt-4 :w
+            w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-colors font-medium"
+        >
             Sign Up
           </button>
-        </form>
       </div>
     </div>
   );
