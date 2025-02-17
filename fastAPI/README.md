@@ -1,4 +1,5 @@
 
+
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -25,7 +26,7 @@ Once your virtual environment is activated, you can install the project dependen
 4. **Seting up .env file:**
 	- Template of env file
 
-```bash
+``` bash
     SUBABASE_URL=[YOUR SUPABASE URL]
     SUPBASE_KEY=[YOUR SUPABASE ROLE KEY]
     DB_USER=[POSTGRES USERNAME PORVIDED BY SUPA BASE]
