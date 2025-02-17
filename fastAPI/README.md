@@ -26,7 +26,7 @@ Once your virtual environment is activated, you can install the project dependen
 4. **Seting up .env file:**
 	- Template of env file
 
-``` bash
+``` 
     SUBABASE_URL=[YOUR SUPABASE URL]
     SUPBASE_KEY=[YOUR SUPABASE ROLE KEY]
     DB_USER=[POSTGRES USERNAME PORVIDED BY SUPA BASE]
@@ -37,7 +37,7 @@ Once your virtual environment is activated, you can install the project dependen
     MAIL_USERNAME= [YOUR MAIL]
     MAIL_PASSOWRD=[YOUR MAIL PASSWORD]
     MAIL_FROM=[YOUR MAIL]
-    ```
+```
 	
 > 1. Use supabase role key not the anon key on SUPABASE_KEY
 > 2.  Choose sqlalchemy as type and get the inforamtion of database from session pooler
