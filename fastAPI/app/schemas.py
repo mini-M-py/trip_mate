@@ -25,11 +25,7 @@ class create_guide(BaseModel):
     languages: List[str]
     specialization: str
     availability: str
-    group_size: int
     additional_skills: List[str]
-    tour_type: str
-    transportation: str
-    area_covered: List[str]
     payment_method: List[str] 
 
 class guide_out(BaseModel):
@@ -45,9 +41,6 @@ class guide_out(BaseModel):
     availability: str
     group_size: int
     additional_skills: List[str]
-    tour_types: str
-    transportation: str
-    area_covered: List[str]
     payment_methods: List[str] 
 
     class Config:

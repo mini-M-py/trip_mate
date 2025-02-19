@@ -34,12 +34,8 @@ class Guide(Base):
     languages = Column(ARRAY(String), nullable=False)
     specialization = Column(String, nullable=False)
     availability = Column(String, nullable=False)
-    group_size = Column(String, nullable=False)
     additional_skills = Column(ARRAY(String), nullable=False)
-    tour_types = Column(String, nullable=False)
     tours_no = Column(Integer, server_default= '0')
-    transportation = Column(String, nullable=False)
-    area_covered  = Column(ARRAY(String), nullable=False)
     payment_methods = Column(ARRAY(String), nullable=False)
     is_booked = Column(Boolean, server_default='False')
 
