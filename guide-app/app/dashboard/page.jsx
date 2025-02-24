@@ -1,7 +1,11 @@
+import Layout from "./layout"
+import Plan from "../components/Plan"
+
 export default function() {
     return (
-        <div>
-            <h1>Dashboard</h1>
-        </div>
-    );
+        <>
+        <Plan/>
+        <Plan/>
+        </>
+            );
 }
