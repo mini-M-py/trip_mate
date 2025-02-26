@@ -1,7 +1,6 @@
 from typing import List
 from pydantic import BaseModel, EmailStr
 from fastapi import UploadFile
-from sqlalchemy import true
 class create_visitior(BaseModel):
     name: str
     email: EmailStr
@@ -11,6 +10,14 @@ class create_visitior(BaseModel):
     password: str
     confirm_password: str
     profile_pic: UploadFile
+
+class create_plan(BaseModel):
+    title: str
+    discription: str
+    tour_type: str
+    transportation: str
+    reviews_count: int
+    price: int
 
 class create_guide(BaseModel):
     name: str

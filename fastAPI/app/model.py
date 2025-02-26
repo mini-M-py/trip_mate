@@ -1,8 +1,8 @@
 from .database import Base
-from sqlalchemy import ARRAY, Text, Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import ARRAY, Text, Column, Integer, String, Boolean, ForeignKey, false
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
-from sqlalchemy.orm import Relationship
+from sqlalchemy.orm import Relationship, relationship
 
 class Visitor(Base):
     __tablename__ = "visitor"
@@ -40,10 +40,17 @@ class Guide(Base):
     is_booked = Column(Boolean, server_default='False')
 
 
-
-
-
-
+class Plan(Base):
+    __tablename__ = "trip_plan"
+    id = Column(Integer, primary_key=True, nullable=False) 
+    guide_id = Column(Integer, ForeignKey("guide.id", ondelete='CASCADE'), nullable=False) 
+    title = Column(String, nullable=False)
+    discription = Column(Text, nullable=False)
+    tour_type = Column(String, nullable=False, server_default="private")
+    transportation  = Column(String, nullable=False)
+    reviews_count = Column(Integer, nullable=False, server_default="0")
+    price = Column(Integer, nullable=False)
+    owner = relationship('Guide')
 
 
 

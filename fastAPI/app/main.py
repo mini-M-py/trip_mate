@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import secrets
 from . import model
 from .database import engine, supabase
-from .routers import user
+from .routers import user, plan
 
 app = FastAPI()
 
@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 app.include_router(user.router)
-
+app.include_router(plan.router)
 model.Base.metadata.create_all(bind=engine)
 #createBucket("Bucket")
 

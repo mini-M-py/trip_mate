@@ -41,7 +41,6 @@ export default function Plan({index, name} : Prop){
                      Rs: 500.00
                   </button>
                   <br/>
-                  <br/>
                   </div>
  
               </div>
