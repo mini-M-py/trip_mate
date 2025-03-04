@@ -54,6 +54,15 @@ class guide_out(BaseModel):
         from_attributes = True
 
 
+class plan_out(guide_out):
+    title: str
+    description: str
+    price: int
+    tour_type: str
+    transportation: str
+    reviews_count: int 
+
+
 
 class dummy_user(BaseModel):
     user_name: str

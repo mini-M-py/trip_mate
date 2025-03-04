@@ -10,10 +10,13 @@ router = APIRouter(
     )
 
 
-@router.post('/create/{id}', status_code=status.HTTP_201_CREATED)
-def create_plan(plan: Annotated[schemas.create_plan, Form()], id: int ): 
+@router.post('/create/{id}', status_code=status.HTTP_201_CREATED, response_model= schemas.plan_out)
+def create_plan(plan: Annotated[schemas.create_plan, Form()], id: int, db:Session = Depends(get_db)): 
        new_plan = model.Plan(guide_id = id, title = plan.title, discription = plan.discription, 
                              tour_type = plan.tour_type, transportation = plan.transportation,
                              price = plan.price) 
+        
+       db.add(new_plan)
+       db.commit()
 
        return new_plan
